@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[14]:
+# In[18]:
 
 
 import streamlit as st
@@ -15,8 +15,8 @@ from streamlit_cropper import st_cropper
 from PIL import Image
 import shutil
 
-shutil.unpack_archive("./Freeze_BestModelAge.zip", "./")
-shutil.unpack_archive("./GenderPrediction.zip", "./")
+# shutil.unpack_archive("./Freeze_BestModelAge.zip", "./")
+# shutil.unpack_archive("./GenderPrediction.zip", "./")
 # from matplotlib import pyplot as plt
 
 # https://stackoverflow.com/questions/14134892/convert-image-from-pil-to-opencv-format
@@ -177,9 +177,9 @@ if(progress == 'Result'):
         st.error('Picture not processed and cannot detect face by CascadeClassifier')
     else:
         st.image(st.session_state.img)
-        age_model = tf.keras.models.load_model('./Freeze_BestModelAge.h5')
+        age_model = tf.keras.models.load_model('./model/AgeDetection/Freeze/Freeze_BestModelAge.h5')
         labels_age = {0: 'Adolescence', 1: 'Adult',2:'Child',3:'Senior Citizen'}
-        gender_model = tf.keras.models.load_model('./GenderPrediction.h5')
+        gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/GenderPrediction.h5')
         labels_gender = {0: 'Female', 1: 'Male'}
         for i in range(len(st.session_state.heads)):
             if (st.session_state.headsbool[i] == True):
@@ -207,4 +207,21 @@ if(progress == 'Result'):
                     with st.expander(gender_predicted_label):
                         st.write(gender_df)
 #                     st.write(gender_predicted_label)
+
+
+# In[ ]:
+
+
+# before use streamlit:
+# conda install -c conda-forge nbconvert
+# run this cell (for convert ipynb to py)
+    # run this cmd in anaconda powershell prompt streamlit run .\Main.py (remember change path to this file's location)
+get_ipython().system('jupyter nbconvert Main.ipynb --to script --TagRemovePreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True -TagRemovePreprocessor.remove_cell_tags=\'{"remove_cell"}\'')
+
+# !heroku create
+# git init
+# git add .
+# git commit -m "initial commit"
+# heroku create
+# git push heroku master
 
