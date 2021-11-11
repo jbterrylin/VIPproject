@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[42]:
+# In[5]:
 
 
 import streamlit as st
@@ -13,27 +13,22 @@ import cv2
 import os
 from streamlit_cropper import st_cropper
 from PIL import Image
-NUMEXPR_MAX_THREADS=16
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 # https://stackoverflow.com/questions/14134892/convert-image-from-pil-to-opencv-format
 # pil_image = PIL.Image.open('Image.jpg').convert('RGB') 
 # open_cv_image = numpy.array(pil_image) 
 # # Convert RGB to BGR 
-# open_cv_image = open_cv_image[:, :, ::-1].copy() 
-print(st.__version__)
-print(tf.__version__)
-print(np.__version__)
-print(pd.__version__)
+# open_cv_image = open_cv_image[:, :, ::-1].copy()
 
 
 # In[266]:
 
 
-def show_img(img):
-    plt.imshow(img), plt.xticks([]), plt.yticks([])
-    plt.show()
+# def show_img(img):
+#     plt.imshow(img), plt.xticks([]), plt.yticks([])
+#     plt.show()
 
 
 # In[ ]:
