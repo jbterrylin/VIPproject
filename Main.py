@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[241]:
+# In[42]:
 
 
 import streamlit as st
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from tensorflow import keras
+# from tensorflow import keras
 import cv2
 import os
 from streamlit_cropper import st_cropper
@@ -22,6 +22,10 @@ from matplotlib import pyplot as plt
 # open_cv_image = numpy.array(pil_image) 
 # # Convert RGB to BGR 
 # open_cv_image = open_cv_image[:, :, ::-1].copy() 
+print(st.__version__)
+print(tf.__version__)
+print(np.__version__)
+print(pd.__version__)
 
 
 # In[266]:
@@ -118,7 +122,7 @@ if(progress == 'Upload Image'):
                 st.session_state.img = []
 
     if (len(st.session_state.img) != 0):
-        st.write("If ok click Process Image radio button on sidebar")
+        st.write("Click “Process Image” radio button on the side bar when the image is uploaded")
         st.image(st.session_state.img)
         
         st.session_state.heads = get_heads(st.session_state.img)
@@ -135,7 +139,7 @@ if(progress == 'Process Image'):
         st.error('No Image choosed')
     else:
         st.write("Number of face detected:", len(st.session_state.heads))
-        st.write("detected face have been load to saved image")
+        st.write("detected face have been load to choosed image")
         
         box_color = st.color_picker(label="Box Color", value='#0000FF')
         img = Image.fromarray(st.session_state.img)
