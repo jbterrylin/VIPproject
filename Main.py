@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[18]:
+# In[20]:
 
 
 import streamlit as st
@@ -24,6 +24,7 @@ import shutil
 # open_cv_image = numpy.array(pil_image) 
 # # Convert RGB to BGR 
 # open_cv_image = open_cv_image[:, :, ::-1].copy()
+print(cv2.__version__)
 
 
 # In[266]:
@@ -207,21 +208,4 @@ if(progress == 'Result'):
                     with st.expander(gender_predicted_label):
                         st.write(gender_df)
 #                     st.write(gender_predicted_label)
-
-
-# In[ ]:
-
-
-# before use streamlit:
-# conda install -c conda-forge nbconvert
-# run this cell (for convert ipynb to py)
-    # run this cmd in anaconda powershell prompt streamlit run .\Main.py (remember change path to this file's location)
-get_ipython().system('jupyter nbconvert Main.ipynb --to script --TagRemovePreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True -TagRemovePreprocessor.remove_cell_tags=\'{"remove_cell"}\'')
-
-# !heroku create
-# git init
-# git add .
-# git commit -m "initial commit"
-# heroku create
-# git push heroku master
 
