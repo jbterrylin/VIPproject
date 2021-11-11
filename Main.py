@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
+# In[14]:
 
 
 import streamlit as st
@@ -13,7 +13,10 @@ import cv2
 import os
 from streamlit_cropper import st_cropper
 from PIL import Image
+import shutil
 
+shutil.unpack_archive("./Freeze_BestModelAge.zip", "./")
+shutil.unpack_archive("./GenderPrediction.zip", "./")
 # from matplotlib import pyplot as plt
 
 # https://stackoverflow.com/questions/14134892/convert-image-from-pil-to-opencv-format
@@ -31,7 +34,7 @@ from PIL import Image
 #     plt.show()
 
 
-# In[ ]:
+# In[9]:
 
 
 # https://towardsdatascience.com/face-detection-in-2-minutes-using-opencv-python-90f89d7c0f81
@@ -174,10 +177,9 @@ if(progress == 'Result'):
         st.error('Picture not processed and cannot detect face by CascadeClassifier')
     else:
         st.image(st.session_state.img)
-        os.path.exists('./model/AgeDetection/Freeze/AgePrediction.h5')
-        age_model = tf.keras.models.load_model('./model/AgeDetection/Freeze/Freeze_BestModelAge.h5')
+        age_model = tf.keras.models.load_model('./Freeze_BestModelAge.h5')
         labels_age = {0: 'Adolescence', 1: 'Adult',2:'Child',3:'Senior Citizen'}
-        gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/GenderPrediction.h5')
+        gender_model = tf.keras.models.load_model('./GenderPrediction.h5')
         labels_gender = {0: 'Female', 1: 'Male'}
         for i in range(len(st.session_state.heads)):
             if (st.session_state.headsbool[i] == True):
