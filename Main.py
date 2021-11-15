@@ -94,7 +94,7 @@ class VideoTransformer(VideoTransformerBase):
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
         self.age_model = tf.keras.models.load_model('./model/AgeDetection/Freeze/Freeze_BestModelAge.h5')
         self.labels_age = {0: 'Adolescence', 1: 'Adult',2:'Child',3:'Senior Citizen'}
-        self.gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/GenderPrediction.h5')
+        self.gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/Freeze_BestModelGender.h5')
         self.labels_gender = {0: 'Female', 1: 'Male'}
 
     def transform(self, frame):
