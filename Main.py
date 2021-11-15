@@ -118,7 +118,7 @@ class VideoTransformer(VideoTransformerBase):
 if(main == 'Real time'):
     webrtc_streamer(key="example",
                 video_processor_factory=VideoTransformer,
-                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:10000"]}]},
+                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
                     media_stream_constraints={
                         "audio": False,
                         "video": True,
