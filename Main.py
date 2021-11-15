@@ -16,6 +16,7 @@ from PIL import Image
 import shutil
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration, ClientSettings
 import av
+from tensorflow.keras.applications.resnet50 import preprocess_input
 
 
 # shutil.unpack_archive("./Freeze_BestModelAge.zip", "./")
@@ -106,9 +107,10 @@ class VideoTransformer(VideoTransformerBase):
                 int(y):int(y+h),
                 int(x):int(x+w) 
             ]
-            head = head/255
+#             head = head/255
             resized = cv2.resize(head, (80,80))
             reshaped = resized.reshape(1,80, 80,3)
+            reshaped=preprocess_input(reshaped)
             predictions = self.age_model.predict(reshaped)
             predicted_class = np.argmax(predictions,axis=1).item(0)
             age_predicted_label = self.labels_age[predicted_class]
@@ -223,16 +225,17 @@ if(progress == 'Result'):
         st.image(st.session_state.img)
         age_model = tf.keras.models.load_model('./model/AgeDetection/Freeze/Freeze_BestModelAge.h5')
         labels_age = {0: 'Adolescence', 1: 'Adult',2:'Child',3:'Senior Citizen'}
-        gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/GenderPrediction.h5')
+        gender_model = tf.keras.models.load_model('./model/GenderDetection/Freeze/Freeze_BestModelGender.h5')
         labels_gender = {0: 'Female', 1: 'Male'}
         for i in range(len(st.session_state.heads)):
             if (st.session_state.headsbool[i] == True):
                 col1, col2 = st.columns([1, 2])
                 img = st.session_state.heads[i]
-                img = img/255
+#                 img = img/255
                 resized = cv2.resize(img, (80,80))
                 reshaped = resized.reshape(1,80, 80,3)
-                
+                reshaped=preprocess_input(reshaped)
+            
                 predictions = age_model.predict(reshaped)
                 predicted_class = np.argmax(predictions,axis=1).item(0)
                 age_predicted_label = labels_age[predicted_class]
