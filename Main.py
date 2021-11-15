@@ -27,15 +27,6 @@ import av
 # open_cv_image = numpy.array(pil_image) 
 # # Convert RGB to BGR 
 # open_cv_image = open_cv_image[:, :, ::-1].copy()
-RTC_CONFIGURATION = RTCConfiguration(
-    {
-      "RTCIceServer": [{
-        "urls": ["turn:turn.xxx.dev:5349"],
-        "username": "user",
-        "credential": "password",
-      }]
-    }
-)
 
 
 # In[9]:
