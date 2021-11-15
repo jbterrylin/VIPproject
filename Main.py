@@ -18,20 +18,8 @@ from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfigura
 import av
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
-
-# shutil.unpack_archive("./Freeze_BestModelAge.zip", "./")
-# shutil.unpack_archive("./GenderPrediction.zip", "./")
-# from matplotlib import pyplot as plt
-
-# https://stackoverflow.com/questions/14134892/convert-image-from-pil-to-opencv-format
-# pil_image = PIL.Image.open('Image.jpg').convert('RGB') 
-# open_cv_image = numpy.array(pil_image) 
-# # Convert RGB to BGR 
-# open_cv_image = open_cv_image[:, :, ::-1].copy()
-
-# RTC_CONFIGURATION = RTCConfiguration(
-#     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-# )
+# https://github.com/tensorflow/tensorflow/issues/45236
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 # In[9]:
