@@ -28,9 +28,9 @@ import av
 # # Convert RGB to BGR 
 # open_cv_image = open_cv_image[:, :, ::-1].copy()
 
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-)
+# RTC_CONFIGURATION = RTCConfiguration(
+#     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+# )
 
 
 # In[9]:
