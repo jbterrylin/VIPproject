@@ -82,7 +82,9 @@ if 'headsbool' not in st.session_state:
 # In[ ]:
 
 
-progress = st.sidebar.radio("Progress",('Upload Image', 'Process Image', 'Result'))
+main = st.sidebar.radio("Type",('Real time', 'Upload picture'))
+if main == 'Upload picture':
+    progress = st.sidebar.radio("Progress",('Upload Image', 'Process Image', 'Result'))
 
 
 # In[ ]:
@@ -114,56 +116,37 @@ class VideoTransformer(VideoTransformerBase):
             predictions = self.age_model.predict(reshaped)
             predicted_class = np.argmax(predictions,axis=1).item(0)
             age_predicted_label = self.labels_age[predicted_class]
-            
+
             predictions = self.gender_model.predict(reshaped)
             predicted_class = np.argmax(predictions,axis=1).item(0)
             gender_predicted_label = self.labels_gender[predicted_class]
-            
+
             cv2.rectangle(img, (x, y), (x + w, y + h), (95, 207, 30), 3)
             cv2.rectangle(img, (x, y - 40), (x + w, y), (95, 207, 30), -1)
             cv2.putText(img, age_predicted_label + "(" + gender_predicted_label + ")", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
         return img
+if(main == 'Real time'):
+    webrtc_streamer(key="example",
+                video_transformer_factory=VideoTransformer,
+                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+                    media_stream_constraints={
+                        "audio": False,
+                        "video": True,
+                    },
+                ),
+            )
 
-if(progress == 'Upload Image'):
+
+# In[ ]:
+
+
+if(main == 'Upload picture' and progress == 'Upload Image'):
     st.title("Upload Image")
-    uploadmethod = st.radio("Way to upload",('Upload Image', 'With Camera'))
-    if(uploadmethod == 'Upload Image'):
-        file = st.file_uploader(label='Upload file', type=['png', 'jpg'])
-        if (file):
-            image = Image.open(file)
-            img_array = np.array(image)
-            st.session_state.img = img_array
-        
-    if(uploadmethod == 'With Camera'):
-#         webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
-        webrtc_streamer(key="example",
-            video_transformer_factory=VideoTransformer,
-            client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-                media_stream_constraints={
-                    "audio": False,
-                    "video": True,
-                },
-            ),
-        )
-#         run = True
-#         placeholder = st.empty()
-#         FRAME_WINDOW = st.image([])
-#         camera = cv2.VideoCapture(0)
-
-#         frame = camera.read()
-#         if placeholder.button('Take Picture'):
-#             st.session_state.img = cv2.cvtColor(frame[1], cv2.COLOR_BGR2RGB)
-#             placeholder.empty()
-#             run = False
-#         while run:
-#             _, frame = camera.read()
-#             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-#             FRAME_WINDOW.image(frame)
-#         if (len(img) != 0):
-#             retakebtn = st.button("Retake")
-#             if retakebtn:
-#                 run =True
-#                 st.session_state.img = []
+    file = st.file_uploader(label='Upload file', type=['png', 'jpg'])
+    if (file):
+        image = Image.open(file)
+        img_array = np.array(image)
+        st.session_state.img = img_array
 
     if (len(st.session_state.img) != 0):
         st.write("Click “Process Image” radio button on the side bar when the image is uploaded")
@@ -177,7 +160,7 @@ if(progress == 'Upload Image'):
 # In[ ]:
 
 
-if(progress == 'Process Image'):
+if(main == 'Upload picture' and progress == 'Process Image'):
     st.title("Process Image")
     if (len(st.session_state.img) == 0):
         st.error('No Image choosed')
@@ -215,7 +198,7 @@ if(progress == 'Process Image'):
 # In[29]:
 
 
-if(progress == 'Result'):
+if(main == 'Upload picture' and progress == 'Result'):
     st.title("Result")
     if (len(st.session_state.img) == 0):
         st.error('No Image choosed')
