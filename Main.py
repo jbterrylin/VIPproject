@@ -14,7 +14,7 @@ import os
 from streamlit_cropper import st_cropper
 from PIL import Image
 import shutil
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration, ClientSettings
 import av
 
 
@@ -133,7 +133,16 @@ if(progress == 'Upload Image'):
             st.session_state.img = img_array
         
     if(uploadmethod == 'With Camera'):
-        webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
+#         webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
+        webrtc_streamer(key="example",
+            video_transformer_factory=VideoTransformer,
+            client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+                media_stream_constraints={
+                    "audio": False,
+                    "video": True,
+                },
+            ),
+        )
 #         run = True
 #         placeholder = st.empty()
 #         FRAME_WINDOW = st.image([])
