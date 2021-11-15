@@ -14,7 +14,7 @@ import os
 from streamlit_cropper import st_cropper
 from PIL import Image
 import shutil
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration
 import av
 
 
@@ -27,6 +27,10 @@ import av
 # open_cv_image = numpy.array(pil_image) 
 # # Convert RGB to BGR 
 # open_cv_image = open_cv_image[:, :, ::-1].copy()
+
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 
 
 # In[9]:
