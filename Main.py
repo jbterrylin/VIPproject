@@ -113,10 +113,12 @@ class VideoTransformer(VideoTransformerBase):
             cv2.rectangle(img, (x, y - 40), (x + w, y), (95, 207, 30), -1)
             cv2.putText(img, age_predicted_label + "(" + gender_predicted_label + ")", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
         return img
+    
+#     19302
 if(main == 'Real time'):
     webrtc_streamer(key="example",
-                video_transformer_factory=VideoTransformer,
-                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+                video_processor_factory=VideoTransformer,
+                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:10000"]}]},
                     media_stream_constraints={
                         "audio": False,
                         "video": True,
