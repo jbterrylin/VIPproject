@@ -14,7 +14,7 @@ import os
 from streamlit_cropper import st_cropper
 from PIL import Image
 import shutil
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration, ClientSettings
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, RTCConfiguration
 import av
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
@@ -118,12 +118,11 @@ class VideoTransformer(VideoTransformerBase):
 if(main == 'Real time'):
     webrtc_streamer(key="example",
                 video_processor_factory=VideoTransformer,
-                client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-                    media_stream_constraints={
-                        "audio": False,
-                        "video": True,
-                    },
-                ),
+                rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+                media_stream_constraints={
+                    "audio": False,
+                    "video": True,
+                }
             )
 
 
