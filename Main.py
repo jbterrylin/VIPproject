@@ -22,38 +22,6 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-# In[9]:
-
-
-# get head by CascadeClassifier
-# https://towardsdatascience.com/face-detection-in-2-minutes-using-opencv-python-90f89d7c0f81
-def get_heads(img):
-    heads = []
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
-    # Convert into grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Detect faces
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-    # Draw rectangle around the faces
-    for (x, y, w, h) in faces:
-        size = 0
-        if (w > h):
-            size = w
-        else:
-            size = h
-        newx = int(x-(w*0.1))
-        neww = int(w*1.2)
-        newy = int(y-(h*0.3))
-        newh = int(h*1.4)
-#         cv2.rectangle(img, (newx, newy), (newx+neww, newy+newh), (255, 0, 0), 2)
-#         cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
-        heads.append(img[
-            int(newy):int(newy+newh),
-            int(newx):int(newx+neww) 
-        ])
-    return heads
-
-
 # In[ ]:
 
 
@@ -67,6 +35,43 @@ if 'heads' not in st.session_state:
     
 if 'headsbool' not in st.session_state:
     st.session_state.headsbool = []
+    
+if 'face_cascade' not in st.session_state:
+    st.session_state.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
+
+
+# In[9]:
+
+
+# get head by CascadeClassifier
+# https://towardsdatascience.com/face-detection-in-2-minutes-using-opencv-python-90f89d7c0f81
+def get_heads(img):
+    heads = []
+    # Convert into grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Detect faces
+    faces = st.session_state.face_cascade.detectMultiScale(gray, 1.1, 4)
+    # Draw rectangle around the faces
+    for (x, y, w, h) in faces:
+        newx = int(x-(w*0.1))
+        neww = int(w*1.2)
+        newy = int(y-(h*0.3))
+        newh = int(h*1.4)
+        if newx < 0:
+            newx = 0
+        if newy < 0:
+            newy = 0
+        if newy+newh > img.shape[0]:
+            newh = img.shape[0] - newy
+        if newx+neww > img.shape[1]:
+            neww = img.shape[1] - newx
+#         cv2.rectangle(img, (newx, newy), (newx+neww, newy+newh), (255, 0, 0), 2)
+#         cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        heads.append(img[
+            int(newy):int(newy+newh),
+            int(newx):int(newx+neww) 
+        ])
+    return heads
 
 
 # In[ ]:
@@ -105,11 +110,11 @@ class VideoTransformer(VideoTransformerBase):
             resized = cv2.resize(head, (224,224))
             reshaped = resized.reshape(1,224, 224,3)
             reshaped=preprocess_input(reshaped)
-            predictions = self.age_model.predict(reshaped)
+            predictions = self.age_model(reshaped).numpy()
             predicted_class = np.argmax(predictions,axis=1).item(0)
             age_predicted_label = self.labels_age[predicted_class]
 
-            predictions = self.gender_model.predict(reshaped)
+            predictions = self.gender_model(reshaped).numpy()
             predicted_class = np.argmax(predictions,axis=1).item(0)
             gender_predicted_label = self.labels_gender[predicted_class]
 
@@ -213,12 +218,12 @@ if(main == 'Upload picture' and progress == 'Result'):
                 reshaped = resized.reshape(1,224, 224,3)
                 reshaped=preprocess_input(reshaped)
             
-                predictions = age_model.predict(reshaped)
+                predictions = age_model(reshaped).numpy()
                 predicted_class = np.argmax(predictions,axis=1).item(0)
                 age_predicted_label = labels_age[predicted_class]
                 age_df = pd.DataFrame(predictions, columns=[labels_age[key] for key in labels_age])
                 
-                predictions = gender_model.predict(reshaped)
+                predictions = gender_model(reshaped).numpy()
                 predicted_class = np.argmax(predictions,axis=1).item(0)
                 gender_predicted_label = labels_gender[predicted_class]
                 gender_df = pd.DataFrame(predictions, columns=[labels_gender[key] for key in labels_gender])
