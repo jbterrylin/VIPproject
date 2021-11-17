@@ -25,6 +25,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # In[9]:
 
 
+# get head by CascadeClassifier
 # https://towardsdatascience.com/face-detection-in-2-minutes-using-opencv-python-90f89d7c0f81
 def get_heads(img):
     heads = []
@@ -56,6 +57,7 @@ def get_heads(img):
 # In[ ]:
 
 
+# something like state
 # https://docs.streamlit.io/library/advanced-features/session-state
 if 'img' not in st.session_state:
     st.session_state.img = []
@@ -88,18 +90,20 @@ class VideoTransformer(VideoTransformerBase):
         self.labels_gender = {0: 'Female', 1: 'Male'}
 
     def transform(self, frame):
+        # get image and all faces
         img = frame.to_ndarray(format="bgr24")
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = self.faceCascade.detectMultiScale(gray, 1.3, 5)
         i =self.i+1
+        # loop all faces to predict and show on camera
         for (x, y, w, h) in faces:
             head = img[
                 int(y):int(y+h),
                 int(x):int(x+w) 
             ]
 #             head = head/255
-            resized = cv2.resize(head, (80,80))
-            reshaped = resized.reshape(1,80, 80,3)
+            resized = cv2.resize(head, (224,224))
+            reshaped = resized.reshape(1,224, 224,3)
             reshaped=preprocess_input(reshaped)
             predictions = self.age_model.predict(reshaped)
             predicted_class = np.argmax(predictions,axis=1).item(0)
@@ -159,7 +163,8 @@ if(main == 'Upload picture' and progress == 'Process Image'):
         
         box_color = st.color_picker(label="Box Color", value='#0000FF')
         img = Image.fromarray(st.session_state.img)
-        # Get a cropped image from the frontend
+#         Get a cropped image from the frontend
+#         https://github.com/turner-anderson/streamlit-cropper
         cropped_img = st_cropper(img, realtime_update=True, box_color=box_color,
                                     aspect_ratio=(1,1))
         savebtn = st.button("save")
@@ -204,8 +209,8 @@ if(main == 'Upload picture' and progress == 'Result'):
                 col1, col2 = st.columns([1, 2])
                 img = st.session_state.heads[i]
 #                 img = img/255
-                resized = cv2.resize(img, (80,80))
-                reshaped = resized.reshape(1,80, 80,3)
+                resized = cv2.resize(img, (224,224))
+                reshaped = resized.reshape(1,224, 224,3)
                 reshaped=preprocess_input(reshaped)
             
                 predictions = age_model.predict(reshaped)
