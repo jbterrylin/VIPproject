@@ -29,7 +29,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # https://docs.streamlit.io/library/advanced-features/session-state
 if 'img' not in st.session_state:
     st.session_state.img = []
-    
+
 if 'heads' not in st.session_state:
     st.session_state.heads = []
     
@@ -62,9 +62,9 @@ def get_heads(img):
         if newy < 0:
             newy = 0
         if newy+newh > img.shape[0]:
-            newh = img.shape[0] - newy
+            newh = img.shape[0] - newy-1
         if newx+neww > img.shape[1]:
-            neww = img.shape[1] - newx
+            neww = img.shape[1] - newx-1
 #         cv2.rectangle(img, (newx, newy), (newx+neww, newy+newh), (255, 0, 0), 2)
 #         cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
         heads.append(img[
@@ -143,8 +143,12 @@ if(main == 'Upload picture' and progress == 'Upload Image'):
     file = st.file_uploader(label='Upload file', type=['png', 'jpg'])
     if (file):
         image = Image.open(file)
+        if image.format is 'PNG':
+            image = image.convert('RGB')
         img_array = np.array(image)
         st.session_state.img = img_array
+        st.session_state.headsbool = []
+        st.session_state.heads = []
 
     if (len(st.session_state.img) != 0):
         st.write("Click “Process Image” radio button on the side bar when the image is uploaded")
@@ -163,7 +167,7 @@ if(main == 'Upload picture' and progress == 'Process Image'):
     if (len(st.session_state.img) == 0):
         st.error('No Image choosed')
     else:
-        st.write("Number of face detected:", len(st.session_state.heads))
+        st.write("Number of face detected:", len( get_heads(st.session_state.img)))
         st.write("detected face have been load to choosed image")
         
         box_color = st.color_picker(label="Box Color", value='#0000FF')
